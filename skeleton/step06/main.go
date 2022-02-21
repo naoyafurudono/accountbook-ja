@@ -126,13 +126,14 @@ func (ab accountbook) GetItems(n int) ([]*Item, error) {
 		}
 		if i < n {
 			items = append(items, ip)
-		} else {
+		} else { // 空間計算量をnに抑える
 			items[oldest] = ip
 			oldest = (oldest + 1) % n
 		}
 	}
 
 	// 並び替える
+	// oldestを先頭に持つスライスを返す
 	res := make([]*Item, 0, n)
 	for i := 0; i < len(items); i++ {
 		res = append(res, items[(i+oldest)%n])
