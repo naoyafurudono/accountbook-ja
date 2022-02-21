@@ -18,20 +18,18 @@ type Item struct {
 }
 
 func main() {
-
-	// TODO: "accountbook.txt"という名前のファイルを書き込み用で開く
-	// 開く場合にエラーが発生した場合
+	bookname := "accountbook.txt"
+	file, err := os.OpenFile(bookname, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
 	if err != nil {
-		// エラーを出力して終了する
 		log.Fatal(err)
 	}
+	defer file.Close()
 
 	// 入力するデータの件数を入力する
 	var n int
 	fmt.Print("何件入力しますか>")
 	fmt.Scan(&n)
 
-	// n回繰り返す
 	for i := 0; i < n; i++ {
 		if err := inputItem(file); err != nil {
 			// エラーを出力して終了する
@@ -39,14 +37,11 @@ func main() {
 		}
 	}
 
-	if err := file.Close(); err != nil {
-		// エラーを出力して終了する
-		log.Fatal(err)
-	}
+	// if err := file.Close(); err != nil {
+	// 	log.Fatal(err)
+	// }
 
-	// 表示
 	if err := showItems(); err != nil {
-		// エラーを出力して終了する
 		log.Fatal(err)
 	}
 }
@@ -70,7 +65,7 @@ func inputItem(file *os.File) error {
 		return err
 	}
 
-	// TODO: エラーがなかったことを表すnilを返す
+	return nil
 }
 
 // 一覧の表示を行う関数
@@ -86,22 +81,21 @@ func showItems() error {
 	fmt.Println("===========")
 
 	scanner := bufio.NewScanner(file)
-	// 1行ずつ読み込む
 	for scanner.Scan() {
-		// TODO: 1行分を取り出す
+		line := scanner.Text()
 
 		// 1行をスペースで分割する
 		splited := strings.Split(line, " ")
 		// 2つに分割できなかった場合はエラー
 		if len(splited) != 2 {
-			// TODO: 「パースに失敗しました」というエラーを生成して返す
+			return errors.New("showItems: fail to parse")
 		}
 
 		// 1つめが品目
 		category := splited[0]
 
 		// 2つめが値段
-		// TODO: string型をint型に変換する
+		price, err := strconv.Atoi(splited[1])
 		if err != nil {
 			return err
 		}
