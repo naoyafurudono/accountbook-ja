@@ -67,13 +67,14 @@ func (hs *Handlers) ListHandler(w http.ResponseWriter, r *http.Request) {
 
 // 保存
 func (hs *Handlers) SaveHandler(w http.ResponseWriter, r *http.Request) {
-	if /* TODO: r.MethodがPOST（http.MethodPost）か調べる */ {
+	if r.Method != http.MethodPost {
 		code := http.StatusMethodNotAllowed
 		http.Error(w, http.StatusText(code), code)
 		return
 	}
 
 	// TODO: フォームから送られてきた品目を取得して、categoryに入れる
+	category := r.FormValue("category")
 	if category == "" {
 		http.Error(w, "品目が指定されていません", http.StatusBadRequest)
 		return
@@ -91,7 +92,7 @@ func (hs *Handlers) SaveHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// TODO: itemをデータベースに保存する
-	if /* ここに追加 */; err != nil {
+	if hs.ab.AddItem(item); err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}

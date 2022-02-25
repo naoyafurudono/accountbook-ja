@@ -29,7 +29,7 @@ var listTmpl = template.Must(template.New("list").Parse(`<!DOCTYPE html>
 		<table border="1">
 			<tr><th>品目</th><th>値段</th></tr>
 			{{- range .}}
-			<tr><td>{{- /* TODO: 品目を埋め込む */ -}}</td><td>{{.Price}}円</td></tr>
+			<tr><td>{{- .Category -}}</td><td>{{.Price}}円</td></tr>
 			{{- end}}
 		</table>
 		{{- else}}
@@ -42,13 +42,15 @@ var listTmpl = template.Must(template.New("list").Parse(`<!DOCTYPE html>
 // 最新の入力データを表示するハンドラ
 func (hs *Handlers) ListHandler(w http.ResponseWriter, r *http.Request) {
 	// TODO: 最新の10件を取得し、itemsに入れる
+	items, err := hs.ab.GetItems(10)
 	if err != nil {
 		// TODO: http.Errorを使って、InternalServerErrorでエラーを返す
+		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 
 	// TODO: 取得したitemsをテンプレートに埋め込む
-	if /* ここに書く */; err != nil {
+	if err := listTmpl.Execute(w, items); err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}

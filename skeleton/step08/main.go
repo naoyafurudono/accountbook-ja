@@ -101,14 +101,14 @@ func showItems(items []*Item) {
 }
 
 // 集計を出力する
-func showSummary( /* TODO: 集計結果を受け取る */ ) {
+func showSummary(summaries []*Summary) {
 	fmt.Println("===========")
 	// タブ区切りで「品目 個数 合計 平均」を出力
 	fmt.Printf("品目\t個数\t合計\t平均\n")
 	// summariesの要素を1つずつ取り出してsに入れて繰り返す
 	for _, s := range summaries {
 		// TODO: 第2引数以降に品目、個数、合計、平均を渡す
-		fmt.Printf("%s\t%d\t%d円\t%.2f円\n" /* ここに追加 */)
+		fmt.Printf("%s\t%d\t%d円\t%.2f円\n", s.Category, s.Count, s.Sum, s.Avg())
 	}
 	fmt.Println("===========")
 }

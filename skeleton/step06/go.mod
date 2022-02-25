@@ -1,3 +1,3 @@
-module github.com/tenntenn/gohandson/accountbook/solution/step06
+module cmdln/accountbook-ja/skeleton/step06
 
-go 1.13
+go 1.17

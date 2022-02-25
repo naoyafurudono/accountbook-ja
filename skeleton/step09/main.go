@@ -33,6 +33,7 @@ func main() {
 	hs := NewHandlers(ab)
 
 	// TODO: ハンドラの登録
+	http.HandleFunc("/", hs.ListHandler)
 
 	fmt.Println("http://localhost:8080 で起動中...")
 	// HTTPサーバを起動する

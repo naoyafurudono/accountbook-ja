@@ -1,22 +1,23 @@
 // STEP07: データベースへの記録
-
 package main
 
 import (
+	"database/sql"
 	"fmt"
 	"os"
-	// TODO:
+
+	"github.com/tenntenn/sqlite"
 	// SQLiteのドライバを使うために
 	// "github.com/tenntenn/sqlite"をインポートする
 )
 
 func main() {
 
-	// TODO:
 	// データベースへ接続
 	// ドライバにはSQLiteを使って、
 	// ドライバ名はsqlite.DriverName
 	// accountbook.dbというファイルでデータベース接続を行う
+	db, err := sql.Open(sqlite.DriverName, "accountbook.db")
 	if err != nil {
 		// 標準エラー出力（os.Stderr)にエラーメッセージを出力して終了
 		fmt.Fprintln(os.Stderr, "エラー：", err)
@@ -67,6 +68,8 @@ LOOP: // 以下のループにラベル「LOOP」をつける
 		case 3: // 終了
 			fmt.Println("終了します")
 			return
+		default:
+			continue
 		}
 	}
 }

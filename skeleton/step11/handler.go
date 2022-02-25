@@ -99,6 +99,7 @@ func (hs *Handlers) SaveHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 // SummaryHandlerで仕様するテンプレート
+// initialize with []*Summary
 var summaryTmpl = template.Must(template.New("summary").Parse(`<!DOCTYPE html>
 <html>
 	<head>
@@ -113,7 +114,7 @@ var summaryTmpl = template.Must(template.New("summary").Parse(`<!DOCTYPE html>
 			var data = google.visualization.arrayToDataTable([
 				['品目', '値段'],
 				{{- range . -}}
-				['{{js .Category}}', {{- /* TODO: 合計を埋め込む */ -}}],
+				['{{js .Category}}', {{- .Sum -}}],
 				{{- end -}}
 			]);
 		
@@ -144,13 +145,14 @@ var summaryTmpl = template.Must(template.New("summary").Parse(`<!DOCTYPE html>
 // 集計を表示するハンドラ
 func (hs *Handlers) SummaryHandler(w http.ResponseWriter, r *http.Request) {
 	// TODO: 集計結果を取得し、summariesに入れる
+	summaries, err := hs.ab.GetSummaries()
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 
 	// TODO: 取得した集計結果をテンプレートに埋め込む
-	if /* ここに書く */; err != nil {
+	if summaryTmpl.Execute(w, summaries); err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
